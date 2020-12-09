@@ -6,6 +6,7 @@ a simple crawler that expands its away around the web.
 - proxy settings
 - better error handling
 - better logging
+- implement some form of paralellism 
 
 # done
 - crawl limit
