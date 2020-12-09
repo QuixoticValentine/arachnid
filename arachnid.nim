@@ -1,7 +1,4 @@
-import httpclient
-import deques, sets
-import os, strformat
-import htmlparser, xmltree, re
+import deques, htmlparser, httpclient, os, re, sets, strformat, xmltree
 
 let client = newHttpClient()
 let urlRex = re"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
@@ -30,7 +27,7 @@ proc crawl*(root: string, target: Regex, limit: int, delay: int): HashSet[string
 
         let url = queue.popLast()
         var hits, urls: seq[string]
-        
+
         try:
             (hits, urls) = url.scrape target
             echo &"scraped {url}"
