@@ -32,6 +32,10 @@ proc crawl*(crawler: var Crawler, roots: seq[string], limit: int) =
         try:
             (hits, urls) = crawler.scrape url
         except HttpRequestError:
+            let err = "failed to load " & url
+            let file = open "log.txt", fmAppend
+            f.writeLine err
+            f.close
             continue
 
         crawler.hits &= hits
