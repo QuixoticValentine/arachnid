@@ -9,15 +9,13 @@ proc scrape(crawler: var Crawler, url: string): (seq[string], seq[string]) =
     if not crawler.proxies.empty:
         let proxy = crawler.proxies.next
         crawler.client = newHttpClient(proxy = proxy)
+        
+    for a in parseHtml(content).findAll("a"):
+      let url = a.attr "href"
 
-    try:
-        for a in parseHtml(content).findAll("a"):
-            let url = a.attr "href"
+      if url.match urlRex:
+        result[1].add url
 
-            if url.match urlRex:
-                result[1].add url
-    except:
-        discard
 
 proc crawl*(crawler: var Crawler, roots: seq[string], limit: int) =
     var crawled = 0
