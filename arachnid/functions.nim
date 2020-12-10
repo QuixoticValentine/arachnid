@@ -1,4 +1,4 @@
-import deques, htmlparser, httpclient, objects, options, os, re, sets, xmltree
+import deques, htmlparser, httpclient, objects, os, re, sets, xmltree
 
 let urlRex = re"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
 
@@ -6,8 +6,8 @@ proc scrape(crawler: var Crawler, url: string): (seq[string], seq[string]) =
     let content = crawler.client.getContent url
     result[0] = content.findAll crawler.target
 
-    if crawler.proxies.isSome:
-        let proxy = crawler.proxies.get.next
+    if not crawler.proxies.empty:
+        let proxy = crawler.proxies.next
         crawler.client = newHttpClient(proxy = proxy)
 
     try:

@@ -1,4 +1,4 @@
-import httpclient, options, re, sets
+import httpclient, re, sets
 
 type
     ProxyCycle* = object
@@ -11,7 +11,7 @@ type
         delay*: int
         hits*: seq[string]
         visited*: HashSet[string]
-        proxies*: Option[ProxyCycle]
+        proxies*: ProxyCycle
 
 proc initProxyCycle*(arr: openArray[Proxy] = []): ProxyCycle =
     ## Initializes a new `ProxyCycle` object.
@@ -25,6 +25,9 @@ proc next*(cyc: var ProxyCycle): Proxy =
     if cyc.idx > cyc.data.high:
         cyc.idx = 0
 
+proc empty*(cyc: ProxyCycle): bool =
+    cyc.data.len == 0
+
 proc initCrawler*(target: Regex, delay: int, proxies: seq[string] = @[]): Crawler =
     ## Initializes a new `Crawler` object.
     result.client = newHttpClient()
@@ -32,7 +35,5 @@ proc initCrawler*(target: Regex, delay: int, proxies: seq[string] = @[]): Crawle
     result.delay = delay
 
     if proxies.len > 0:
-        result.proxies = some initProxyCycle()
-
         for proxy in proxies:
-            result.proxies.get.data.add newProxy(proxy)
+            result.proxies.data.add newProxy(proxy)
